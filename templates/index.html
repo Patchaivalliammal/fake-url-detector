@@ -1,28 +1,119 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fake URL Detector</title>
+
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(135deg, #0a0f24, #162760);
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 80px auto;
+            background: rgba(255, 255, 255, 0.10);
+            padding: 40px;
+            border-radius: 18px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #00eaff;
+            letter-spacing: 1px;
+        }
+
+        p {
+            text-align: center;
+            font-size: 16px;
+            margin-bottom: 30px;
+            color: #d3e2ff;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+            margin-bottom: 25px;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            background: #00d4ff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            color: black;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #07b0db;
+        }
+
+        .result-box {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            text-align: center;
+        }
+
+        .safe {
+            color: #4cff79;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .danger {
+            color: #ff4f4f;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+    </style>
 </head>
+
 <body>
-    <h2>Fake URL Detector</h2>
-    <input id="url" type="text" placeholder="Enter URL" style="width:300px;">
-    <button onclick="check()">Check</button>
 
-    <p id="result"></p>
+    <div class="container">
+        <h1>🔍 Fake URL Detector</h1>
+        <p>Enter any website link to check if it is safe or malicious.</p>
 
-<script>
-async function check() {
-    const url = document.getElementById("url").value;
-    const res = await fetch("/api/predict", {
-        method:"POST",
-        headers:{ "Content-Type":"application/json" },
-        body: JSON.stringify({url})
-    });
-    const data = await res.json();
-    document.getElementById("result").innerHTML =
-        "Result: " + data.label + "<br>Score: " + data.score;
-}
-</script>
+        <form method="POST">
+            <input type="text" name="url" placeholder="Enter URL here..." required>
+            <button type="submit">Check URL</button>
+        </form>
+
+        {% if result %}
+        <div class="result-box">
+            <h2>Result:</h2>
+
+            {% if result.label == "malicious" %}
+                <p class="danger">⚠️ This URL appears to be Malicious!</p>
+            {% else %}
+                <p class="safe">✔️ This URL appears Safe.</p>
+            {% endif %}
+
+            <p><strong>Score:</strong> {{ result.score }}</p>
+        </div>
+        {% endif %}
+    </div>
 
 </body>
 </html>
