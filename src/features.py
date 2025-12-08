@@ -1,8 +1,10 @@
+# src/features.py
 def extract_features(url):
-    url = url.strip()
+    u = url.strip()
+    host = u.split("//")[-1].split("/")[0]
     return {
-        "url_len": len(url),
-        "host_len": len(url.split("//")[-1].split('/')[0]),
-        "dots": url.count("."),
-        "digits": sum(c.isdigit() for c in url)
+        "url_len": len(u),
+        "host_len": len(host),
+        "dots": u.count("."),
+        "digits": sum(c.isdigit() for c in u)
     }
